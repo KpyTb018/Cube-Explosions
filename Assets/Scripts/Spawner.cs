@@ -1,34 +1,36 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[RequireComponent(typeof(Exploder))]
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private float _explosionForce;
     [SerializeField] private float _explosionRadius;
 
+    private Exploder _exploder;
+
+    private void Awake()
+    {
+        _exploder = GetComponent<Exploder>();
+    }
+
     public void CreateCubes(Cube cube)
     {
-        if (cube.TryDivide())
+        int minObjects = 2;
+        int maxObjects = 7;
+        int numberNewObjects = Random.Range(minObjects, maxObjects);
+
+        List<Rigidbody> explorableObjects = new();
+
+        cube.UpdateParameters();
+
+        for (int i = 0; i < numberNewObjects; i++)
         {
-            int minObjects = 2;
-            int maxObjects = 7;
-            int numberNewObjects = Random.Range(minObjects, maxObjects);
-
-            List<Rigidbody> ExplorableObjects = new();
-
-            cube.UpdateParameters();
-
-            for (int i = 0; i < numberNewObjects; i++)
-            {
-                Cube newCube = Instantiate(cube, cube.transform.position, Quaternion.identity);
-                ExplorableObjects.Add(newCube.GetComponent<Rigidbody>());
-            }
-
-            foreach (Rigidbody explorableObject in ExplorableObjects)
-                explorableObject.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
+            Cube newCube = Instantiate(cube, cube.transform.position, Quaternion.identity);
+            explorableObjects.Add(newCube.rigidBody);
         }
 
-        Destroy(cube.gameObject);
+        _exploder.Explode(_explosionForce, cube.transform.position, _explosionRadius, explorableObjects);
     }
 }

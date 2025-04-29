@@ -1,19 +1,14 @@
+using System;
 using UnityEngine;
-
-[RequireComponent(typeof(Spawner))]
 
 public class MouseInput : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
 
-    private Spawner _spawner;
     private Ray _ray;
     private RaycastHit _hit;
 
-    private void Awake()
-    {
-        _spawner = GetComponent<Spawner>();
-    }
+    public event Action<Cube> CubeSelected;
 
     private void Update()
     {
@@ -23,7 +18,7 @@ public class MouseInput : MonoBehaviour
 
             if (Physics.Raycast(_ray, out _hit))
                 if (_hit.collider.TryGetComponent(out Cube cube))
-                    _spawner.CreateCubes(cube);
+                    CubeSelected(cube);
         }
     }
 }

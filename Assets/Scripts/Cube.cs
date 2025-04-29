@@ -8,14 +8,18 @@ public class Cube : MonoBehaviour
     [SerializeField] private int _separationChance = 100;
 
     private Material _material;
+    private Rigidbody _rigidBody;
     private int _minSeparationChance = 0;
     private int _maxSeparationChance = 101;
 
     private void Awake()
     {
+        _rigidBody = GetComponent<Rigidbody>();
         _material = GetComponent<Renderer>().material;
-        _material.color = Random.ColorHSV();
+        _material.color = Random.ColorHSV();       
     }
+
+    public Rigidbody rigidBody => _rigidBody;
 
     public void UpdateParameters()
     {
