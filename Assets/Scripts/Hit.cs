@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Spawner))]
 [RequireComponent(typeof(MouseInput))]
 
-public class SelectedCube : MonoBehaviour
+public class Hit : MonoBehaviour
 {
     private MouseInput _mouseInput;
     private Spawner _spawner;
@@ -29,7 +29,7 @@ public class SelectedCube : MonoBehaviour
 
     private void TryDivide(Cube cube)
     {
-        if (cube.TryDivide())
+        if (cube.IsDivide())
             _spawner.CreateCubes(cube);
 
         Destroy(cube.gameObject);
